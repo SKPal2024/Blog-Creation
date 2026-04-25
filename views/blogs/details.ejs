@@ -1,0 +1,30 @@
+<html lang="en">
+<%- include("../partials/head.ejs") %>
+<body>
+    <%- include("../partials/nav.ejs") %>
+    <div class="details content">
+        <h2><%= blog.title %></h2>
+        <div class="content">
+            <p><%= blog.body %></p>
+        </div>
+        <a class="delete" data-doc="<%= blog._id %>">
+            <img src="/trashcan.svg" alt="delete icon">
+        </a>
+    </div>
+    <%- include("../partials/footer.ejs") %>
+    <script>
+        const trashCan = document.querySelector('a.delete');
+        trashCan.addEventListener('click', (e) => {
+            const endPoint = `/blogs/${trashCan.dataset.doc}`;
+            fetch(endPoint, {
+                method: 'DELETE',
+            })
+                // retrieve the response of the DELETE API and parse it into JSON format
+                .then(response => response.json())
+                // redirect current URL to `data.redirect` which indicates the `redirect` property of the `response` object sent back from the Node.js server
+                .then(data => window.location.href = data.redirect)
+                .catch(err => console.log(err));
+        });
+    </script>
+</body>
+</html>
